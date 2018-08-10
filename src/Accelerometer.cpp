@@ -1,19 +1,27 @@
 #include "Accelerometer.hpp"
 
-Accelerometer::Accelerometer(float yMin, float yMax) : 
+Accelerometer::Accelerometer(float yMin, float yMax, int derivativeTime) : 
         degCoefficient(180.0/(yMax - yMin)), 
-        radCoefficient(factorToRad*180.0/(yMax - yMin))
+        radCoefficient(factorToRad*180.0/(yMax - yMin)),
+        derivativeTime(derivativeTime)
 {
     compass.init();
     compass.enableDefault();
 }
-float Accelerometer::getDeviationDeg(float setPoint)
+float Accelerometer::getDeviationDeg()
 {
     compass.read();
-    return abs(degCoefficient * compass.a.y - setPoint);
+    return degCoefficient * compass.a.y;
 }
-float Accelerometer::getDeviationRad(float setPoint)
+float Accelerometer::getDeviationRad()
 {
     compass.read();
-    return abs(radCoefficient * compass.a.y - setPoint);
+    return radCoefficient * compass.a.y;
+}
+void Accelerometer::updateState(StateVector & state)
+{
+    float previousAngle = getDeviationRad();
+    delay(derivativeTime);
+    state.angle = getDeviationRad();
+    state.angleDerivative = (previousAngle - state.angle)/derivativeTime;
 }

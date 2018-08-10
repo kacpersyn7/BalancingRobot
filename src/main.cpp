@@ -8,17 +8,18 @@
 int main(int argc, char const *argv[])
 {
     AF_DCMotor motor(3, MOTOR34_64KHZ);
-    Accelerometer accelerometer(constants::yMin, constants::yMax);
+    Accelerometer accelerometer(constants::yMin, constants::yMax, constants::derivativeTime);
     Serial.begin(9600);
     Wire.begin();
     motor.setSpeed(40);
+    StateVector state{};
     while(1)
     {
         motor.run(FORWARD);
         delay(500);
         motor.run(RELEASE);
         delay(500);
-        accelerometer.getDeviationDeg(0.0);
+        accelerometer.updateState(state);
         // compass.read();
         // float deviation = factor_to_deg * compass.a.y;
         // Serial.println(deviation);
