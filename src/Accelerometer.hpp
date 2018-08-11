@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ACCELEROMETER_HPP
+#define ACCELEROMETER_HPP
+
 #include <LSM303.h>
 #include "StateVector.hpp"
 
@@ -16,3 +18,4 @@ private:
     const int derivativeTime{};
     LSM303 compass{};  
 };
+#endif

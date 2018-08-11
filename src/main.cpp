@@ -20,9 +20,6 @@ int main(int argc, char const *argv[])
         motor.run(RELEASE);
         delay(500);
         accelerometer.updateState(state);
-        // compass.read();
-        // float deviation = factor_to_deg * compass.a.y;
-        // Serial.println(deviation);
         motor.run(BACKWARD);
         delay(500);
     }
